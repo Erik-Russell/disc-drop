@@ -25,7 +25,16 @@ describe DiscDrop do
     end
   end
 
-  describe '#new_board' do
-    it 'create empty board' do
-      expect ( subject.new_board }.to 
+  describe '#drop_disc' do
+    it 'rejects invalid input' do
+      bad_input = 7
+      expect { subject.drop_disc(bad_input) }.to output("invalid input\n").to_stdout
+    end
+
+    it 'accepts good input' do
+      good_input = 5
+      subject.drop_disc(good_input)
+      expect(subject.board[5][5]).to eq('x')
+    end
+  end
 end
