@@ -84,7 +84,7 @@ class DiscDrop
 
   def reverse_diagonal_win?
     # lower-left to upper-right (↗)
-    (3..@rows - 4).each do |row|
+    (3...@rows).each do |row|
       (0..@columns - 4).each do |col|
         diagonal = (0..3).map { |i| @board[row - i][col + i] }
         if diagonal.join == 'xxxx' || diagonal.join == 'oooo'
@@ -98,4 +98,19 @@ class DiscDrop
   def check_winner
     horizontal_win? || vertical_win? || diagonal_win? || reverse_diagonal_win?
   end
+
+  def full_board?
+    @board.flatten.none?('_')
+  end
+
+  def game_over?
+    if check_winner
+      puts "#{@current_player} wins!!!"
+      @game_over = true
+    elsif full_board?
+      puts "It's a draw!"
+      @game_over = true
+    end
+  end
+
 end
