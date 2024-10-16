@@ -41,6 +41,23 @@ describe DiscDrop do
   describe '#check_winner' do
     subject(:game) { DiscDrop.new }
 
+    context 'when there is no winner' do
+      before do
+        game.instance_variable_set(:@board, [
+          ['_', '_', '_', '_', '_', '_', '_'],
+          ['_', '_', '_', '_', '_', '_', '_'],
+          ['_', '_', '_', 'x', '_', '_', '_'],
+          ['_', '_', 'o', '_', '_', '_', '_'],
+          ['_', 'x', '_', '_', '_', '_', '_'],
+          ['x', '_', '_', '_', '_', '_', '_']
+        ])
+      end
+
+      it 'returns false' do
+        expect(game.check_winner).to be false
+      end
+    end
+
     context 'when there is a bottom-left to top-right diagonal win' do
       before do
         game.instance_variable_set(:@board, [
@@ -144,6 +161,44 @@ describe DiscDrop do
 
       it 'returns true for a full board' do
         expect(no_win.full_board?).to be true
+      end
+    end
+  end
+
+  describe '#game_over?' do
+    subject(:end_game) { DiscDrop.new }
+
+    context 'when there are no moves' do
+      before do
+        end_game.instance_variable_set(:@board, [
+          ['x', 'o', 'x', 'o', 'x', 'o', 'x'],
+          ['x', 'o', 'x', 'o', 'x', 'o', 'x'],
+          ['o', 'x', 'o', 'x', 'o', 'x', 'o'],
+          ['o', 'x', 'o', 'x', 'o', 'x', 'o'],
+          ['x', 'o', 'x', 'o', 'x', 'o', 'x'],
+          ['o', 'x', 'o', 'x', 'o', 'x', 'o']
+        ])
+      end
+
+      it 'returns true' do
+        expect(end_game.game_over?).to be true
+      end
+    end
+
+   context 'when there is a winning move' do
+      before do
+        end_game.instance_variable_set(:@board, [
+          ['_', '_', '_', '_', '_', '_', '_'],
+          ['_', '_', '_', '_', '_', '_', '_'],
+          ['_', '_', '_', '_', '_', '_', '_'],
+          ['_', 'x', 'x', 'x', 'x', '_', '_'],
+          ['_', '_', '_', '_', '_', '_', '_'],
+          ['_', '_', '_', '_', '_', '_', '_']
+        ])
+      end
+
+      it 'returns true' do
+        expect(end_game.game_over?).to be true
       end
     end
   end
