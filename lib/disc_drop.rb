@@ -21,27 +21,23 @@ class DiscDrop
     end
   end
 
-  def drop_disc(column)
+  def drop_disc(column, player)
     unless valid_input?(column)
-      puts "invalid input"
-      return nil
+      puts "Invalid input. Please pick a column between 0 and 6."
+      return
     end
-
+  
     dropped = false
-
     @board.reverse_each do |row|
       if row[column] == '_'
-        row[column] = @current_player
+        row[column] = player
         dropped = true
         break
       end
     end
-
-    unless dropped
-      puts 'column full'
-    end
+  
+    puts "Column full! Choose another." unless dropped
   end
-
   def switch_player
     @current_player = @current_player == 'x' ? 'o' : 'x'
   end
@@ -113,4 +109,21 @@ class DiscDrop
     end
   end
 
+  def play_game
+    until @game_over
+      display_board
+      puts "#{@current_player}'s turn. Pick a column (0-6):"
+      column = gets.chomp.to_i
+
+      if valid_input?(column)
+        drop_disc(column, @current_player)
+        game_over?
+        switch_player unless @game_over
+      else
+        puts "Invalid input. Please pick a valid column."
+      end
+    end
+    display_board
+    puts "Game Over! #{@game_over_message}"
+  end
 end
